@@ -1,6 +1,5 @@
 # URL Frontend
 
-Small Next.js + Bun + TypeScript + Tailwind frontend for the URL shortener API.
 
 Quick start (using Bun):
 
