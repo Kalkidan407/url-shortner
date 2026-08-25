@@ -112,7 +112,7 @@ export default function ShortenForm() {
 
           <button
             type="submit"
-            className="button-primary min-w-[180px] rounded-xl bg-gradient-to-r from-violet-500 to-sky-500 px-5 py-3 font-semibold text-white hover:from-violet-400 hover:to-sky-400 disabled:cursor-not-allowed disabled:opacity-70"
+            className="button-primary min-w-[180px] rounded-xl bg-gradient-to-r from-[#02091373] to-orange-500/65 px-5 py-3 font-semibold text-white hover:from-violet-400 hover:to-sky-400 disabled:cursor-not-allowed disabled:opacity-70"
             disabled={loading}
           >
             {loading ? 'Working…' : 'Shorten Now'}
