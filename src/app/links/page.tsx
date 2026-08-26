@@ -8,7 +8,7 @@ export default function LinksPage() {
   const links = useLinksStore((s) => s.links)
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[#06111f] text-white">
+    <div className="min-h-screen overflow-hidden bg-[#06111f80] text-white">
       <div className="pointer-events-none absolute inset-0 opacity-70">
         <div className="absolute left-10 top-24 h-28 w-28 rounded-full bg-violet-500/20 blur-3xl" />
         <div className="absolute right-12 top-32 h-36 w-36 rounded-full bg-sky-500/20 blur-3xl" />
@@ -18,13 +18,13 @@ export default function LinksPage() {
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        <header className="mb-8 flex items-center justify-between rounded-full border border-slate-700/80 bg-slate-950/50 px-5 py-3 backdrop-blur-sm">
+          <header className="mb-10 flex items-center  gap-28 rounded-full border border-slate-700/80 bg-[#06111f62] px-5 py-3 backdrop-blur-sm">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-r from-violet-500 to-sky-500 font-black text-white shadow-lg shadow-violet-500/30">
-              L
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-r from-orange-500/65 to-sky-500 font-black text-white shadow-lg shadow-violet-500/30">
+              U
             </div>
             <div>
-              <div className="text-lg font-bold tracking-tight text-white">LinkShort</div>
+              <div className="text-lg font-bold tracking-tight text-white">UrlShortner</div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-slate-400">Smart links</div>
             </div>
           </div>
@@ -33,9 +33,10 @@ export default function LinksPage() {
             <Link href="/" className="transition hover:text-white">Home</Link>
             <Link href="/links" className="transition hover:text-white">Links</Link>
           </nav>
+          
         </header>
 
-        <section className="rounded-[28px] border border-slate-700/80 bg-slate-950/60 p-4 shadow-2xl shadow-slate-950/50 sm:p-6 lg:p-8">
+        <section className="rounded-[28px] border border-slate-700/80  bg-[#1c67ca0e] p-4 shadow-2xl shadow-slate-950/50 sm:p-6 lg:p-8">
           <div className="mb-6 flex items-center justify-between gap-3">
             <div>
               <p className="text-xs uppercase tracking-[0.22em] text-sky-300">Overview</p>

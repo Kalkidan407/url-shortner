@@ -29,6 +29,7 @@ export default function Page() {
             <Link href="/" className="transition hover:text-white">Home</Link>
             <Link href="/links" className="transition hover:text-white">Links</Link>
           </nav>
+          
         </header>
 
         <main className="space-y-10">

@@ -48,7 +48,7 @@ export default function ShortenForm() {
         process.env.NEXT_PUBLIC_API_BASE_URL ??
         'https://url-shortener-a697.onrender.com'
 
-      const fullShort = `${apiBase}/api/redirect/${shortCode}`
+      const fullShort = `${apiBase}/r/${shortCode}`
       const resolved = await resolveShort(shortCode)
       const targetUrl = resolved.location || data.originalUrl || input
       const finalSiteName = data.siteName || siteName || 'web'

@@ -1,4 +1,5 @@
 import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 type LinkItem = {
   id: string
@@ -16,10 +17,17 @@ type State = {
   clear: () => void
 }
 
-const useLinksStore = create<State>((set) => ({
-  links: [],
-  add: (l) => set((s) => ({ links: [l, ...s.links] })),
-  clear: () => set({ links: [] }),
-}))
+const useLinksStore = create<State>()(
+  persist(
+    (set) => ({
+      links: [],
+      add: (l) => set((s) => ({ links: [l, ...s.links] })),
+      clear: () => set({ links: [] }),
+    }),
+    {
+      name: 'links-store',
+    }
+  )
+)
 
 export default useLinksStore
