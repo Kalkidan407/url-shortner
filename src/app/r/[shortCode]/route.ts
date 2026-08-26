@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const apiBase =
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  'https://url-shortener-a697.onrender.com'
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://url-shortener-a697.onrender.com'
 
+/**
+ * GET /r/[shortCode]
+ * Shorter redirect route for shortened URLs
+ * Resolves short code and performs a 302 redirect to the original URL
+ */
 export async function GET(
   _req: NextRequest,
   { params }: { params: { shortCode: string } }
 ) {
   try {
     const shortCode = params.shortCode
-    const upstreamUrl = `${apiBase}/api/redirect/${encodeURIComponent(shortCode)}`
+    const upstreamUrl = `${API_BASE}/api/redirect/${encodeURIComponent(shortCode)}`
 
     const upstreamRes = await fetch(upstreamUrl, {
       method: 'GET',
@@ -41,7 +44,6 @@ export async function GET(
       { status: 404 }
     )
   } catch (error: any) {
-    console.error('short redirect route error', error)
     return NextResponse.json(
       {
         message: error?.message || 'Unable to resolve short link',

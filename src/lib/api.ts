@@ -1,8 +1,23 @@
-const apiBase =
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  'https://url-shortener-a697.onrender.com'
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://url-shortener-a697.onrender.com'
 
-export const shorten = async (url: string, siteName = 'web') => {
+interface ShortenResponse {
+  id: string
+  shortCode: string
+  originalUrl: string
+  siteName?: string
+  clickCount?: number
+  createdAt?: string
+}
+
+interface ResolveResponse {
+  status: number
+  location: string | null
+}
+
+/**
+ * Shorten a long URL using the backend API
+ */
+export const shorten = async (url: string, siteName = 'web'): Promise<ShortenResponse> => {
   const res = await fetch('/api/shorten', {
     method: 'POST',
     headers: {
@@ -17,11 +32,7 @@ export const shorten = async (url: string, siteName = 'web') => {
   const payload = await res.json().catch(() => ({}))
 
   if (!res.ok) {
-    const message =
-      payload?.message ||
-      payload?.error ||
-      'Request failed'
-
+    const message = payload?.message || payload?.error || 'Request failed'
     throw new Error(message)
   }
 
@@ -29,9 +40,9 @@ export const shorten = async (url: string, siteName = 'web') => {
 }
 
 /**
- * Resolve a short link to its original URL.
+ * Resolve a short code to its original URL
  */
-export const resolveShort = async (shortId: string) => {
+export const resolveShort = async (shortId: string): Promise<ResolveResponse> => {
   const targetUrl = `/api/resolve/${encodeURIComponent(shortId)}`
 
   try {

@@ -1,26 +1,283 @@
-# URL Frontend
+# UrlShortener - Frontend
 
-Quick start (using Bun):
+A URL shortening application built with Next.js 14, React 18, TypeScript, and Tailwind CSS.
 
-1. Install dependencies with Bun:
+## Features
 
-```bash
-cd url-frontend
-bun install
+- ✨ **Smart URL Shortening** - Convert long URLs into concise short links
+- 📱 **Responsive Design** - Works seamlessly on desktop and mobile devices
+- 💾 **Persistent Storage** - Links are saved locally in your browser
+- 🎯 **Click Tracking** - Monitor the number of clicks for each shortened link
+- 🏷️ **Site Categorization** - Organize links by site/project name
+- 🔗 **Instant Sharing** - One-click copy to clipboard
+- ⚡ **Real-time Updates** - Instant feedback and link generation
+- 🎨 **Dark Theme UI** - Beautiful gradient design with Tailwind CSS
+
+## Tech Stack
+
+- **Framework**: [Next.js 14](https://nextjs.org/) - React framework with App Router
+- **Language**: [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand) - Lightweight state management
+- **Storage**: Browser localStorage with Zustand persistence
+- **API Client**: Fetch API with error handling
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout
+│   ├── page.tsx            # Home page
+│   ├── api/
+│   │   ├── shorten/        # URL shortening API route
+│   │   └── resolve/        # URL resolution API route
+│   ├── links/
+│   │   └── page.tsx        # Links history page
+│   └── r/
+│       └── [shortCode]/    # Short link redirect handler
+├── components/
+│   ├── ShortenForm.tsx     # Main form component
+│   └── LinkCard.tsx        # Link display card
+├── lib/
+│   ├── api.ts              # API client functions
+│   └── constants.ts        # Application constants
+├── store/
+│   └── useLinksStore.ts    # Global state store
+└── styles/
+    └── globals.css         # Global styles
 ```
 
-2. Run development server:
+## Getting Started
 
-```bash
-bun run dev
-# or with npm/yarn: npm run dev
+### Prerequisites
+
+- Node.js 16+ or Bun
+- npm, yarn, or Bun package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Kalkidan407/url-shortner.git
+   cd url-frontend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
+
+3. **Configure environment**
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+4. **Run development server**
+   ```bash
+   npm run dev
+   # or
+   bun run dev
+   ```
+
+5. **Open in browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Environment Variables
+
+```env
+# Backend API base URL (defaults to Render deployment)
+NEXT_PUBLIC_API_BASE_URL=https://url-shortener-a697.onrender.com
 ```
 
-Environment:
-- `NEXT_PUBLIC_API_BASE_URL` - base URL for the backend API (defaults to `https://url-shortener-a697.onrender.com`)
+## Available Scripts
 
-Notes:
-- Components use small shadcn-like Tailwind utilities (no external shadcn package required). 
-- Small state store uses `zustand` to keep created links in memory.
+```bash
+npm run dev      # Start development server
+npm run build    # Build for production
+npm start        # Start production server
+npm run lint     # Run ESLint
+```
 
-Adjust API paths in `src/lib/api.ts` if the backend expects a different endpoint shape.
+## Backend API
+
+The frontend communicates with a Spring Boot backend API that handles:
+
+- **URL Shortening**: Generate unique short codes for long URLs
+- **URL Resolution**: Redirect short codes to original URLs
+- **Click Tracking**: Count and track link usage
+- **Link Management**: Store and retrieve link metadata
+
+### Backend Repository
+
+[URL-Shortener Backend](https://github.com/Kalkidan407/URL-Shortener) - Built with Spring Boot
+
+
+## How It Works
+
+### URL Shortening Flow
+
+1. User enters a long URL and optional site name
+2. Frontend validates and sends request to `/api/shorten`
+3. Backend API (`/api/urls/post`) generates a unique short code
+4. Frontend constructs the short URL: `{API_BASE}/r/{shortCode}`
+5. Short link is displayed and saved to browser storage
+6. User can copy and share the shortened link
+
+### Link Resolution Flow
+
+1. User clicks or visits a short link: `{API_BASE}/r/{shortCode}`
+2. Frontend route handler calls backend `/api/redirect/{shortCode}`
+3. Backend returns redirect information
+4. User is redirected to original URL
+5. Click count is incremented on backend
+
+## Components
+
+### ShortenForm
+Main form component for URL shortening. Handles:
+- URL input validation
+- Form submission and API calls
+- Error handling and display
+- Latest link preview
+- All links display
+
+### LinkCard
+Reusable card component displaying link information:
+- Original and shortened URLs
+- Click count
+- Site/project name
+- Created date
+- Copy to clipboard functionality
+
+## State Management
+
+Using Zustand for lightweight state management:
+- Stores all shortened links
+- Persists to browser localStorage automatically
+- Survives page refreshes and browser restarts
+- Clean add/clear API
+
+```typescript
+const addLink = useLinksStore((s) => s.add)
+const links = useLinksStore((s) => s.links)
+const clearLinks = useLinksStore((s) => s.clear)
+```
+
+## Deployment
+
+### Deploy on Vercel
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push
+   ```
+
+2. **Import on Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Select "Next.js" framework
+
+3. **Configure Environment**
+   - Add `NEXT_PUBLIC_API_BASE_URL` environment variable
+   - Set it to your backend API URL
+
+4. **Deploy**
+   - Click "Deploy"
+   - Your site will be live at `https://your-project.vercel.app`
+
+## API Routes
+
+### `/api/shorten` (POST)
+**Request:**
+```json
+{
+  "originalUrl": "https://example.com/very/long/url",
+  "siteName": "web"
+}
+```
+
+**Response:**
+```json
+{
+  "id": "unique-id",
+  "shortCode": "G4VoQH",
+  "originalUrl": "https://example.com/very/long/url",
+  "siteName": "web",
+  "clickCount": 0,
+  "createdAt": "2024-08-26T10:30:00Z"
+}
+```
+
+### `/api/resolve/{shortCode}` (GET)
+**Response:**
+```json
+{
+  "status": 200,
+  "location": "https://example.com/very/long/url"
+}
+```
+
+### `/r/{shortCode}` (GET)
+Redirects to the original URL with HTTP 302 status.
+
+## Browser Support
+
+- Chrome/Edge 90+
+- Firefox 88+
+- Safari 14+
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Performance Optimizations
+
+- Next.js App Router with server/client components
+- Tailwind CSS for minimal CSS output
+- Zustand for efficient state updates
+- localStorage for instant link access
+- TypeScript for development-time type safety
+
+## Code Quality
+
+- TypeScript for type safety
+- ESLint for code linting
+- Clean component architecture
+- Proper error handling
+- Responsive design patterns
+
+## Future Enhancements
+
+- [ ] Analytics dashboard with charts
+- [ ] Link expiration settings
+- [ ] Custom short codes
+- [ ] User authentication
+- [ ] Link groups/collections
+- [ ] QR code generation
+- [ ] API rate limiting
+- [ ] Dark/light theme toggle
+
+## License
+
+MIT License - See LICENSE file for details
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Support
+
+For issues and questions:
+- Frontend: [URL-Shortener Frontend Issues](https://github.com/Kalkidan407/url-shortner/issues)
+- Backend: [URL-Shortener Backend Issues](https://github.com/Kalkidan407/URL-Shortener/issues)
+
+## Author
+
+[Kalkidan407](https://github.com/Kalkidan407)
+
+---
+
+**Happy URL Shortening! 🚀**

@@ -1,7 +1,10 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-type LinkItem = {
+/**
+ * Represents a shortened URL link
+ */
+export type LinkItem = {
   id: string
   original: string
   short: string
@@ -11,21 +14,27 @@ type LinkItem = {
   createdAt?: string
 }
 
-type State = {
+/**
+ * Links store state and actions
+ */
+type LinksState = {
   links: LinkItem[]
-  add: (l: LinkItem) => void
+  add: (link: LinkItem) => void
   clear: () => void
 }
 
-const useLinksStore = create<State>()(
+/**
+ * Global store for managing shortened links with localStorage persistence
+ */
+const useLinksStore = create<LinksState>()(
   persist(
     (set) => ({
       links: [],
-      add: (l) => set((s) => ({ links: [l, ...s.links] })),
+      add: (link) => set((state) => ({ links: [link, ...state.links] })),
       clear: () => set({ links: [] }),
     }),
     {
-      name: 'links-store',
+      name: 'links-store', // localStorage key
     }
   )
 )

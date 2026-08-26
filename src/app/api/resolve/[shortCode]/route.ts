@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const apiBase =
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  'https://url-shortener-a697.onrender.com'
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://url-shortener-a697.onrender.com'
 
+/**
+ * GET /api/resolve/[shortCode]
+ * Resolves a short code to the original URL by querying the backend API
+ */
 export async function GET(
   _req: NextRequest,
   { params }: { params: { shortCode: string } }
 ) {
   try {
     const shortCode = params.shortCode
-    const upstreamUrl = `${apiBase}/api/redirect/${encodeURIComponent(shortCode)}`
-
-    console.log('resolve route upstreamUrl', upstreamUrl)
+    const upstreamUrl = `${API_BASE}/api/redirect/${encodeURIComponent(shortCode)}`
 
     const upstreamRes = await fetch(upstreamUrl, {
       method: 'GET',
@@ -22,11 +22,9 @@ export async function GET(
       },
     })
 
-    console.log('resolve route upstream status', upstreamRes.status)
-
     const location = upstreamRes.headers.get('location') || null
     const rawBody = await upstreamRes.text()
-    console.log('resolve route rawBody', rawBody)
+    
     const normalizedBody = rawBody.trim()
     const parsedLocation =
       location ||
@@ -44,7 +42,6 @@ export async function GET(
       }
     )
   } catch (error: any) {
-    console.error('resolve route error', error)
     return NextResponse.json(
       {
         message: error?.message || 'Unable to resolve short link',

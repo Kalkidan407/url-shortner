@@ -1,15 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const apiBase =
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  'https://url-shortener-a697.onrender.com'
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://url-shortener-a697.onrender.com'
 
+/**
+ * POST /api/shorten
+ * Creates a shortened URL by forwarding the request to the backend API
+ */
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const { originalUrl, siteName = 'web' } = body ?? {}
 
-    const upstreamRes = await fetch(`${apiBase}/api/urls/post`, {
+    // Validate input
+    if (!originalUrl) {
+      return NextResponse.json(
+        { message: 'originalUrl is required' },
+        { status: 400 }
+      )
+    }
+
+    const upstreamRes = await fetch(`${API_BASE}/api/urls/post`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
